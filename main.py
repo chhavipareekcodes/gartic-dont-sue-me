@@ -31,8 +31,8 @@ async def on_message(message):
         await message.channel.send(content="make a guess using '='")
 
     if message.content.startswith("-start"):
-        answer=random.choice(list(drawings.items()))
-        drawing=drawings[answer]
+        answer,drawing=random.choice(list(drawings.items()))
+
         await message.channel.send(drawing)
     
     if message.content.startswith("="):
@@ -44,3 +44,4 @@ async def on_message(message):
 
 
 # client.run('token')
+
