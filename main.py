@@ -1,5 +1,7 @@
 import discord 
 import random
+import os 
+
 
 
 drawings={
@@ -9,6 +11,7 @@ drawings={
 }
 
 
+globalAnswer=None
 
 
 client=discord.Client(intents=discord.Intents.all())
@@ -22,26 +25,29 @@ async def on_ready():
 @client.event
 async def on_message(message):
 
+    global globalAnswer
+
     if message.author==client.user:
         return
 
     if message.content.startswith("-gartic"):
         await message.channel.send(content="welcome to gartic!")
-        await message.channel.send(content="-start to begin the game")
-        await message.channel.send(content="make a guess using '='")
+        await message.channel.send(content="-start to begin the game")     
 
     if message.content.startswith("-start"):
+        await message.channel.send(content="make a guess using '='")
         answer,drawing=random.choice(list(drawings.items()))
-
+        globalAnswer=answer
         await message.channel.send(drawing)
     
     if message.content.startswith("="):
-        if answer==message.content:
-            await message.channel.send(message.author," guessed it!")
+        if globalAnswer==message.content[1:]:
+            await message.channel.send(f"{message.author.mention} guessed it!")
+             
 
     if message.content.startswith("-end"):
-        return
+        return 
 
 
-# client.run('token')
-
+TOKEN=os.environ.get('authToken')
+client.run(TOKEN)
